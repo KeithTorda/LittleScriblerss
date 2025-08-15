@@ -1,0 +1,58 @@
+Build a React app called **LittleScribler** — an interactive daycare learning platform for kids.  
+The app should have a fun, colorful, and playful UI (kid-friendly with rounded buttons, animations, and bright colors).  
+
+### Features:
+1. **Home Page**  
+   - Title: "LittleScribler – Fun Learning for Kids"  
+   - Menu with big buttons to choose learning categories:  
+     - Alphabets  
+     - Numbers  
+     - Shapes  
+     - Colors  
+     - Animals  
+
+2. **Alphabets Section**  
+   - Show letters A–Z with colorful cards.  
+   - Each letter plays a sound when clicked (e.g., "A for Apple").  
+   - Popup animation with example word + image.  
+   - Levels: start with vowels → full alphabet.  
+
+3. **Numbers Section**  
+   - Numbers 1–20 shown with illustrations.  
+   - Clicking a number shows objects (e.g., "3 → three apples").  
+   - Simple addition mini-game with drag-and-drop answers.  
+
+4. **Shapes & Colors**  
+   - Display basic shapes (circle, square, triangle, star).  
+   - Clicking changes color randomly.  
+   - Game mode: Match shape to color.  
+
+5. **Animals Section**  
+   - Grid of animals (dog, cat, lion, elephant, etc.).  
+   - Each plays a sound (bark, meow, roar) when clicked.  
+   - Popup with fun fact about the animal.  
+
+6. **Interactive Popups**  
+   - Use modals for interactive lessons (example: "Great job!" animations).  
+   - Reward stars for progress.  
+
+7. **Timers & Levels**  
+   - Add timers for mini-games (e.g., match the correct letter in 30 seconds).  
+   - Multiple difficulty levels (easy, medium, hard).  
+   - Track progress with a progress bar.  
+
+8. **Design Requirements**  
+   - Use **Tailwind CSS** for styling.  
+   - Use **Framer Motion** for animations (bounce, fade-in).  
+   - Mobile-friendly layout (kids will use tablets/phones).  
+
+9. **Bonus Features**  
+   - Background music toggle.  
+   - "Parental Mode" button to view progress report.  
+
+### Tech Stack:
+- React (Vite or CRA)  
+- Tailwind CSS  
+- Framer Motion (for animations)  
+
+Deliver the full React codebase with routes for each section, reusable card components, and fun interactive popups.  
