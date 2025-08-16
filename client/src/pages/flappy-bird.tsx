@@ -15,6 +15,30 @@ const animals = [
   { name: "Panda", emoji: "🐼", color: "#4A5859" },
 ];
 
+// Hook to detect screen size
+const useScreenSize = () => {
+  const [screenSize, setScreenSize] = useState({
+    width: typeof window !== 'undefined' ? window.innerWidth : 400,
+    height: typeof window !== 'undefined' ? window.innerHeight : 600,
+    isMobile: typeof window !== 'undefined' ? window.innerWidth <= 768 : false
+  });
+
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+        isMobile: window.innerWidth <= 768
+      });
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  return screenSize;
+};
+
 export default function FlappyBird() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [gameStarted, setGameStarted] = useState(false);
@@ -22,23 +46,38 @@ export default function FlappyBird() {
   const [score, setScore] = useState(0);
   const [currentAnimalIndex, setCurrentAnimalIndex] = useState(0);
   const { toast } = useToast();
+  const { width: screenWidth, height: screenHeight, isMobile } = useScreenSize();
+
+  // Calculate responsive canvas dimensions
+  const getCanvasDimensions = () => {
+    const maxWidth = isMobile ? Math.min(screenWidth * 0.9, 350) : 400;
+    const maxHeight = isMobile ? Math.min(screenHeight * 0.6, 500) : 600;
+    
+    return {
+      width: maxWidth,
+      height: maxHeight,
+      scale: maxWidth / 400 // Scale factor for game elements
+    };
+  };
+
+  const canvasDimensions = getCanvasDimensions();
 
   // Game variables
   const gameRef = useRef({
     bird: {
-      x: 50,
-      y: 200,
-      width: 30,  // Reduced hitbox size
-      height: 30, // Reduced hitbox size
+      x: 50 * canvasDimensions.scale,
+      y: canvasDimensions.height / 3,
+      width: 30 * canvasDimensions.scale,  
+      height: 30 * canvasDimensions.scale, 
       velocity: 0,
-      gravity: 0.5,
-      jump: -8,
+      gravity: isMobile ? 0.2 : 0.3, // Even slower on mobile
+      jump: isMobile ? -5 : -6,       // Gentler jump on mobile
     },
     pipes: [] as {x: number, top: number, bottom: number, passed: boolean}[],
-    gameSpeed: 2,
-    pipeGap: 170, // Increased gap size
-    pipeWidth: 60,
-    pipeInterval: 1500, // ms
+    gameSpeed: isMobile ? 0.8 : 1.2,   // Much slower on mobile
+    pipeGap: isMobile ? 220 * canvasDimensions.scale : 200 * canvasDimensions.scale, // Bigger gap on mobile
+    pipeWidth: 60 * canvasDimensions.scale,
+    pipeInterval: isMobile ? 2500 : 2000, // More time between pipes on mobile
     lastPipeTime: 0,
     animationFrameId: 0,
     currentAnimalIndex: 0,
@@ -52,8 +91,8 @@ export default function FlappyBird() {
         ...gameRef.current,
         bird: {
           ...gameRef.current.bird,
-          x: 50,
-          y: 200,
+          x: 50 * canvasDimensions.scale,
+          y: canvasDimensions.height / 3,
           velocity: 0,
         },
         pipes: [],
@@ -90,8 +129,8 @@ export default function FlappyBird() {
     if (!ctx) return;
 
     // Set canvas dimensions
-    canvas.width = 400;
-    canvas.height = 600;
+    canvas.width = canvasDimensions.width;
+    canvas.height = canvasDimensions.height;
 
     // Game loop
     const gameLoop = (timestamp: number) => {
@@ -111,11 +150,11 @@ export default function FlappyBird() {
       // Draw bird
       const currentAnimal = animals[gameRef.current.currentAnimalIndex];
       ctx.fillStyle = currentAnimal.color;
-      ctx.font = "40px Arial";
+      ctx.font = `${40 * canvasDimensions.scale}px Arial`;
       ctx.fillText(
         currentAnimal.emoji, 
-        gameRef.current.bird.x - 15, // Center the emoji
-        gameRef.current.bird.y + 15  // Center the emoji
+        gameRef.current.bird.x - (15 * canvasDimensions.scale), // Center the emoji
+        gameRef.current.bird.y + (15 * canvasDimensions.scale)  // Center the emoji
       );
       
       // Debug hitbox (uncomment to see)
@@ -130,7 +169,7 @@ export default function FlappyBird() {
       // Generate pipes
       if (timestamp - gameRef.current.lastPipeTime > gameRef.current.pipeInterval) {
         const pipeGap = gameRef.current.pipeGap;
-        const pipeTop = Math.random() * (canvas.height - pipeGap - 150) + 80; // Adjusted for better gameplay
+        const pipeTop = Math.random() * (canvas.height - pipeGap - 150 * canvasDimensions.scale) + 80 * canvasDimensions.scale; // Adjusted for better gameplay
         
         gameRef.current.pipes.push({
           x: canvas.width,
@@ -209,8 +248,8 @@ export default function FlappyBird() {
 
       // Draw score
       ctx.fillStyle = "white";
-      ctx.font = "24px Arial";
-      ctx.fillText(`Score: ${score}`, 10, 30);
+      ctx.font = `${24 * canvasDimensions.scale}px Arial`;
+      ctx.fillText(`Score: ${score}`, 10 * canvasDimensions.scale, 30 * canvasDimensions.scale);
 
       // Continue game loop if not game over
       if (!gameOver) {
@@ -252,24 +291,33 @@ export default function FlappyBird() {
           Flappy Animals! 🐾
         </h2>
         <p className="text-xl md:text-2xl text-gray-600 mb-8 max-w-2xl mx-auto">
-          Tap or press SPACE to jump! Avoid obstacles and watch your animal change with each point!
+          Tap the screen or press SPACE to jump! Avoid the green pipes and watch your animal change with each point!
         </p>
 
-        <div className="flex flex-col items-center justify-center">
-          <div className="relative mb-4">
+        <div className="flex flex-col items-center justify-center px-2">
+          <div className="relative mb-4 w-full max-w-md">
             <canvas
               ref={canvasRef}
-              width={400}
-              height={600}
-              className="border-4 border-kidnavy rounded-lg bg-sky-200 cursor-pointer"
+              width={canvasDimensions.width}
+              height={canvasDimensions.height}
+              className="border-4 border-kidnavy rounded-lg bg-sky-200 cursor-pointer touch-none select-none w-full h-auto max-w-full"
               onClick={handleJump}
+              onTouchStart={(e) => {
+                e.preventDefault();
+                handleJump();
+              }}
+              style={{
+                maxWidth: '100%',
+                height: 'auto',
+                aspectRatio: `${canvasDimensions.width} / ${canvasDimensions.height}`
+              }}
             />
             
             {!gameStarted && !gameOver && (
               <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-lg">
                 <Button 
                   onClick={startGame}
-                  className="text-2xl px-8 py-6 bg-kidgreen hover:bg-green-600"
+                  className={`${isMobile ? 'text-xl px-6 py-4' : 'text-2xl px-8 py-6'} bg-kidgreen hover:bg-green-600`}
                 >
                   Start Game
                 </Button>
@@ -277,12 +325,12 @@ export default function FlappyBird() {
             )}
             
             {gameOver && (
-              <div className="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-50 rounded-lg">
-                <h3 className="text-4xl font-bold text-white mb-4">Game Over!</h3>
-                <p className="text-2xl text-white mb-4">Score: {score}</p>
+              <div className="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-50 rounded-lg p-4">
+                <h3 className={`${isMobile ? 'text-2xl' : 'text-4xl'} font-bold text-white mb-4`}>Game Over!</h3>
+                <p className={`${isMobile ? 'text-lg' : 'text-2xl'} text-white mb-4`}>Score: {score}</p>
                 <Button 
                   onClick={startGame}
-                  className="text-2xl px-8 py-6 bg-kidorange hover:bg-orange-600"
+                  className={`${isMobile ? 'text-xl px-6 py-4' : 'text-2xl px-8 py-6'} bg-kidorange hover:bg-orange-600`}
                 >
                   Play Again
                 </Button>
@@ -290,16 +338,16 @@ export default function FlappyBird() {
             )}
           </div>
           
-          <div className="flex flex-wrap justify-center gap-4 mt-4">
-            <div className="bg-white p-4 rounded-lg shadow-md">
-              <h3 className="text-xl font-bold mb-2">Current Animal</h3>
-              <div className="text-5xl">{animals[currentAnimalIndex].emoji}</div>
-              <p className="mt-2">{animals[currentAnimalIndex].name}</p>
+          <div className={`flex ${isMobile ? 'flex-col gap-3' : 'flex-wrap justify-center gap-4'} mt-4 w-full max-w-lg`}>
+            <div className="bg-white p-4 rounded-lg shadow-md flex-1 text-center">
+              <h3 className={`${isMobile ? 'text-lg' : 'text-xl'} font-bold mb-2`}>Current Animal</h3>
+              <div className={`${isMobile ? 'text-3xl' : 'text-5xl'}`}>{animals[currentAnimalIndex].emoji}</div>
+              <p className={`mt-2 ${isMobile ? 'text-sm' : 'text-base'}`}>{animals[currentAnimalIndex].name}</p>
             </div>
             
-            <div className="bg-white p-4 rounded-lg shadow-md">
-              <h3 className="text-xl font-bold mb-2">Score</h3>
-              <div className="text-5xl">{score}</div>
+            <div className="bg-white p-4 rounded-lg shadow-md flex-1 text-center">
+              <h3 className={`${isMobile ? 'text-lg' : 'text-xl'} font-bold mb-2`}>Score</h3>
+              <div className={`${isMobile ? 'text-3xl' : 'text-5xl'}`}>{score}</div>
             </div>
           </div>
         </div>
