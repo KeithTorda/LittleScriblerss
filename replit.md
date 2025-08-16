@@ -6,7 +6,11 @@ LittleScribler is an interactive educational React application designed for youn
 
 ## User Preferences
 
-Preferred communication style: Simple, everyday language.
+- Preferred communication style: Simple, everyday language.
+- Requested all buttons to be fully functional
+- Added timer functionality to games (30 seconds per game)
+- Added "Better luck next time" modals for incorrect answers
+- Changed fonts to be more kid-friendly (Comic Neue, Fredoka, Bubblegum Sans)
 
 ## System Architecture
 
@@ -20,7 +24,7 @@ Preferred communication style: Simple, everyday language.
 - **Audio**: Web Audio API through custom hooks for educational sounds, letter pronunciation, and interactive feedback
 
 ### Design System
-- **Typography**: Kid-friendly fonts including 'Fredoka One' for headings and 'Nunito' for body text
+- **Typography**: Kid-friendly fonts including 'Fredoka' for headings and 'Comic Neue' for body text, with 'Bubblegum Sans' as additional kid-friendly option
 - **Color Palette**: Bright, engaging colors (kidblue, kidorange, kidpink, kidpurple, kidgreen) designed for children
 - **Components**: Custom learning cards with 3D effects, interactive modals, and progress tracking elements
 - **Responsive Design**: Mobile-first approach optimized for tablets and touch devices commonly used by children
@@ -69,4 +73,15 @@ Preferred communication style: Simple, everyday language.
 
 ### Audio and Interaction
 - **Web Audio API**: Browser-native audio capabilities for educational sounds, letter pronunciation, and interactive feedback
+- **Background Music Toggle**: Functional background music system with loop capability
+- **Sound Effects Management**: Global sound management with enable/disable functionality
+
+### Game Features
+- **Timed Games**: 30-second timer challenges across all learning sections
+- **Interactive Math Game**: Addition problems with randomized answers and score tracking
+- **Shape Matching Game**: Drag-and-drop color matching with visual feedback
+- **Letter Recognition Game**: Find-the-letter challenges with scoring system
+- **Animal Sound Game**: Audio-based animal identification with hint system
+- **Better Luck Modals**: Encouraging feedback for incorrect answers
+- **Progress Tracking**: Local storage-based achievement system with stars and completion tracking
 - **React Hook Form**: Form handling library with validation support for any future user input requirements

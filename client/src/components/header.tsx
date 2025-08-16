@@ -1,23 +1,80 @@
-import { useState } from "react";
+import { useState, useEffect, createContext, useContext } from "react";
 import { motion } from "framer-motion";
 import { Music, UserCheck, Volume2, VolumeX } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import InteractiveModal from "@/components/interactive-modal";
+
+// Audio Context for global sound management
+const AudioContext = createContext<{
+  isMusicPlaying: boolean;
+  isSoundEnabled: boolean;
+  toggleMusic: () => void;
+  toggleSound: () => void;
+}>({
+  isMusicPlaying: false,
+  isSoundEnabled: true,
+  toggleMusic: () => {},
+  toggleSound: () => {},
+});
+
+export const useAudioSettings = () => useContext(AudioContext);
 
 export default function Header() {
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
   const [isSoundEnabled, setIsSoundEnabled] = useState(true);
+  const [parentalModalOpen, setParentalModalOpen] = useState(false);
+  const [backgroundAudio, setBackgroundAudio] = useState<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    // Create background music audio element
+    const audio = new Audio();
+    audio.loop = true;
+    audio.volume = 0.3;
+    
+    // Generate simple background music using Web Audio API
+    const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+    
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+    
+    oscillator.frequency.setValueAtTime(200, audioContext.currentTime);
+    oscillator.type = 'sine';
+    gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+    
+    setBackgroundAudio(audio);
+    
+    return () => {
+      if (audioContext.state !== 'closed') {
+        audioContext.close();
+      }
+    };
+  }, []);
 
   const toggleMusic = () => {
+    if (backgroundAudio) {
+      if (isMusicPlaying) {
+        backgroundAudio.pause();
+      } else {
+        backgroundAudio.play().catch(console.error);
+      }
+    }
     setIsMusicPlaying(!isMusicPlaying);
+    
+    // Save to localStorage
+    localStorage.setItem('littlescribler-music', (!isMusicPlaying).toString());
   };
 
   const toggleSound = () => {
     setIsSoundEnabled(!isSoundEnabled);
+    
+    // Save to localStorage  
+    localStorage.setItem('littlescribler-sound', (!isSoundEnabled).toString());
   };
 
   const openParentalMode = () => {
-    // TODO: Implement parental mode modal
-    console.log("Opening parental mode");
+    setParentalModalOpen(true);
   };
 
   return (
@@ -76,6 +133,16 @@ export default function Header() {
           </div>
         </div>
       </div>
+      
+      <InteractiveModal
+        isOpen={parentalModalOpen}
+        onClose={() => setParentalModalOpen(false)}
+        type="success"
+        data={{
+          message: "Welcome to Parental Mode! Here you can view your child's learning progress and achievements.",
+          emoji: "👨‍👩‍👧‍👦"
+        }}
+      />
     </motion.header>
   );
 }

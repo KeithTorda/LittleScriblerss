@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&family=Fredoka+One:wght@400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Fredoka:wght@400;500;600;700&family=Bubblegum+Sans&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -36,10 +36,10 @@
   --sidebar-accent-foreground: hsl(203.8863 88.2845% 53.1373%);
   --sidebar-border: hsl(205.0000 25.0000% 90.5882%);
   --sidebar-ring: hsl(202.8169 89.1213% 53.1373%);
-  --font-sans: 'Nunito', sans-serif;
-  --font-serif: Georgia, serif;
-  --font-mono: Menlo, monospace;
-  --font-kid: 'Fredoka One', cursive;
+  --font-sans: 'Comic Neue', cursive, sans-serif;
+  --font-serif: 'Comic Neue', cursive;
+  --font-mono: 'Comic Neue', monospace;
+  --font-kid: 'Fredoka', 'Bubblegum Sans', cursive;
   --radius: 1.5rem;
   
   /* Kid-friendly colors */
