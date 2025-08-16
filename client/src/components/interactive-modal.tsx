@@ -1,3 +1,4 @@
+import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Volume2, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -19,7 +20,20 @@ interface ModalProps {
 }
 
 export default function InteractiveModal({ isOpen, onClose, type, data = {} }: ModalProps) {
-  const { playSuccessSound, playLetterSound, playAnimalSound } = useAudio();
+  const { playSuccessSound, playLetterSound, playAnimalSound, speakText } = useAudio();
+
+  // Speak the message when modal opens
+  React.useEffect(() => {
+    if (isOpen && data.message) {
+      setTimeout(() => {
+        speakText(data.message || "Great job!");
+      }, 500);
+    } else if (isOpen && type === "success") {
+      setTimeout(() => {
+        speakText("Great job! You found the right answer!");
+      }, 500);
+    }
+  }, [isOpen, data.message, type, speakText]);
 
   const handlePlaySound = () => {
     if (type === "letter" && data.letter) {

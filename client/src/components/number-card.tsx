@@ -18,14 +18,11 @@ export default function NumberCard({
   color,
   onNumberClick 
 }: NumberCardProps) {
-  const { playTone } = useAudio();
+  const { playNumberSound } = useAudio();
   const { updateProgress } = useProgress();
 
   const handleClick = () => {
-    // Play ascending tones based on the number
-    for (let i = 0; i < Math.min(number, 5); i++) {
-      setTimeout(() => playTone(400 + (i * 100), 0.2), i * 150);
-    }
+    playNumberSound(number);
     updateProgress("numbers", number.toString());
     onNumberClick?.(number, word, emoji);
   };
