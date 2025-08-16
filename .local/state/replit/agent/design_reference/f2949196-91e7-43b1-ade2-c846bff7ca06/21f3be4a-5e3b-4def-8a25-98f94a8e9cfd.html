@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LittleScribler - Fun Learning for Kids</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'nunito': ['Nunito', 'sans-serif'],
+                    },
+                    colors: {
+                        'kidblue': '#3B82F6',
+                        'kidorange': '#F97316',
+                        'kidpink': '#EC4899',
+                        'kidpurple': '#A855F7',
+                        'kidgreen': '#10B981',
+                        'kidcream': '#FFFBEB',
+                        'kidnavy': '#1E293B',
+                    },
+                    animation: {
+                        'bounce-gentle': 'bounce-gentle 2s infinite',
+                        'wiggle': 'wiggle 1s ease-in-out infinite',
+                    }
+                }
+            }
+        };
+    </script>
+    <style>
+        @keyframes bounce-gentle {
+            0%, 20%, 53%, 80%, 100% {
+                transform: translate3d(0,0,0);
+            }
+            40%, 43% {
+                transform: translate3d(0, -10px, 0);
+            }
+            70% {
+                transform: translate3d(0, -5px, 0);
+            }
+            90% {
+                transform: translate3d(0, -2px, 0);
+            }
+        }
+        @keyframes wiggle {
+            0%, 7% {
+                transform: rotateZ(0);
+            }
+            15% {
+                transform: rotateZ(-15deg);
+            }
+            20% {
+                transform: rotateZ(10deg);
+            }
+            25% {
+                transform: rotateZ(-10deg);
+            }
+            30% {
+                transform: rotateZ(6deg);
+            }
+            35% {
+                transform: rotateZ(-4deg);
+            }
+            40%, 100% {
+                transform: rotateZ(0);
+            }
+        }
+        .card-3d {
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        .card-3d:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+        .btn-3d {
+            box-shadow: 0 6px 0 #2563EB, 0 8px 15px rgba(0,0,0,0.2);
+            transition: all 0.1s ease;
+        }
+        .btn-3d:hover {
+            transform: translateY(2px);
+            box-shadow: 0 4px 0 #2563EB, 0 6px 12px rgba(0,0,0,0.15);
+        }
+        .btn-3d:active {
+            transform: translateY(6px);
+            box-shadow: 0 0px 0 #2563EB, 0 2px 8px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-kidcream to-blue-50 font-nunito min-h-screen">
+    
+    <!-- @COMPONENT: Header [navigation, title, parental mode] -->
+    <header class="bg-white shadow-lg border-b-4 border-kidblue sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 bg-gradient-to-br from-kidorange to-kidpink rounded-2xl flex items-center justify-center shadow-lg">
+                        <i class="fas fa-pencil-alt text-white text-xl"></i>
+                    </div>
+                    <h1 class="text-2xl md:text-3xl font-bold text-kidnavy">LittleScribler</h1>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <!-- @FUNCTIONALITY: Background music toggle -->
+                    <button class="w-12 h-12 bg-kidgreen rounded-2xl flex items-center justify-center text-white shadow-md hover:shadow-lg transition-all duration-300" data-event="click:toggleMusic">
+                        <i class="fas fa-music text-lg"></i>
+                    </button>
+                    <!-- @FUNCTIONALITY: Parental mode access -->
+                    <button class="bg-kidpurple text-white px-4 py-2 rounded-2xl font-semibold text-lg shadow-md hover:shadow-lg transition-all duration-300" data-event="click:openParentalMode">
+                        <i class="fas fa-user-tie mr-2"></i>Parent
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- @END_COMPONENT: Header -->
+
+    <main class="max-w-6xl mx-auto px-4 py-8">
+        
+        <!-- @COMPONENT: HomeSection [main navigation, welcome message] -->
+        <section id="home-section" class="text-center mb-12">
+            <div class="mb-8">
+                <h2 class="text-4xl md:text-6xl font-bold text-kidnavy mb-4 animate-bounce-gentle">
+                    Fun Learning for Kids! 🎉
+                </h2>
+                <p class="text-xl md:text-2xl text-gray-600 mb-8 max-w-2xl mx-auto">
+                    Choose your favorite learning adventure and let's explore together!
+                </p>
+                
+                <!-- Progress Overview -->
+                <div class="bg-white rounded-3xl p-6 shadow-lg max-w-md mx-auto mb-8">
+                    <h3 class="text-2xl font-bold text-kidnavy mb-4">Your Progress</h3>
+                    <div class="flex justify-center space-x-2 mb-4">
+                        <!-- @STATE: earned stars based on progress -->
+                        <div data-bind="progress.stars" class="flex space-x-1">
+                            <i class="fas fa-star text-yellow-400 text-2xl"></i>
+                            <i class="fas fa-star text-yellow-400 text-2xl"></i>
+                            <i class="fas fa-star text-yellow-400 text-2xl"></i>
+                            <i class="fas fa-star text-gray-300 text-2xl"></i>
+                            <i class="fas fa-star text-gray-300 text-2xl"></i>
+                        </div>
+                    </div>
+                    <div class="bg-gray-200 rounded-full h-4 mb-2">
+                        <div class="bg-gradient-to-r from-kidgreen to-kidblue h-4 rounded-full w-3/5" data-bind="progress.percentage"></div>
+                    </div>
+                    <span class="text-lg font-semibold text-kidnavy" data-bind="progress.text">60% Complete - Keep Going!</span>
+                </div>
+            </div>
+
+            <!-- Learning Categories Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                
+                <!-- Alphabets Category -->
+                <div class="card-3d bg-gradient-to-br from-kidblue to-blue-600 rounded-3xl p-8 text-white cursor-pointer transform hover:scale-105 transition-all duration-300" data-event="click:showAlphabets">
+                    <div class="text-6xl mb-4 animate-wiggle">🔤</div>
+                    <h3 class="text-3xl font-bold mb-3">Alphabets</h3>
+                    <p class="text-xl opacity-90">Learn A to Z with fun sounds!</p>
+                    <div class="mt-4 bg-white bg-opacity-20 rounded-2xl py-2 px-4">
+                        <span class="text-lg font-semibold">26 Letters</span>
+                    </div>
+                </div>
+
+                <!-- Numbers Category -->
+                <div class="card-3d bg-gradient-to-br from-kidorange to-orange-600 rounded-3xl p-8 text-white cursor-pointer transform hover:scale-105 transition-all duration-300" data-event="click:showNumbers">
+                    <div class="text-6xl mb-4 animate-wiggle">🔢</div>
+                    <h3 class="text-3xl font-bold mb-3">Numbers</h3>
+                    <p class="text-xl opacity-90">Count from 1 to 20!</p>
+                    <div class="mt-4 bg-white bg-opacity-20 rounded-2xl py-2 px-4">
+                        <span class="text-lg font-semibold">Math Games</span>
+                    </div>
+                </div>
+
+                <!-- Shapes Category -->
+                <div class="card-3d bg-gradient-to-br from-kidpink to-pink-600 rounded-3xl p-8 text-white cursor-pointer transform hover:scale-105 transition-all duration-300" data-event="click:showShapes">
+                    <div class="text-6xl mb-4 animate-wiggle">🔺</div>
+                    <h3 class="text-3xl font-bold mb-3">Shapes</h3>
+                    <p class="text-xl opacity-90">Discover colorful shapes!</p>
+                    <div class="mt-4 bg-white bg-opacity-20 rounded-2xl py-2 px-4">
+                        <span class="text-lg font-semibold">Color Match</span>
+                    </div>
+                </div>
+
+                <!-- Colors Category -->
+                <div class="card-3d bg-gradient-to-br from-kidpurple to-purple-600 rounded-3xl p-8 text-white cursor-pointer transform hover:scale-105 transition-all duration-300" data-event="click:showColors">
+                    <div class="text-6xl mb-4 animate-wiggle">🎨</div>
+                    <h3 class="text-3xl font-bold mb-3">Colors</h3>
+                    <p class="text-xl opacity-90">Learn rainbow colors!</p>
+                    <div class="mt-4 bg-white bg-opacity-20 rounded-2xl py-2 px-4">
+                        <span class="text-lg font-semibold">Mix & Match</span>
+                    </div>
+                </div>
+
+                <!-- Animals Category -->
+                <div class="card-3d bg-gradient-to-br from-kidgreen to-green-600 rounded-3xl p-8 text-white cursor-pointer transform hover:scale-105 transition-all duration-300 md:col-span-2 lg:col-span-1" data-event="click:showAnimals">
+                    <div class="text-6xl mb-4 animate-wiggle">🐾</div>
+                    <h3 class="text-3xl font-bold mb-3">Animals</h3>
+                    <p class="text-xl opacity-90">Meet animal friends!</p>
+                    <div class="mt-4 bg-white bg-opacity-20 rounded-2xl py-2 px-4">
+                        <span class="text-lg font-semibold">Fun Sounds</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- @END_COMPONENT: HomeSection -->
+
+        <!-- @COMPONENT: AlphabetsSection [letter cards, sound effects, popup lessons] -->
+        <section id="alphabets-section" class="hidden">
+            <div class="text-center mb-8">
+                <button class="bg-gray-500 text-white px-6 py-3 rounded-2xl font-bold text-xl mb-6 btn-3d" data-event="click:showHome">
+                    <i class="fas fa-arrow-left mr-2"></i>Back to Home
+                </button>
+                <h2 class="text-4xl md:text-5xl font-bold text-kidnavy mb-4">🔤 Learn Alphabets</h2>
+                <p class="text-xl text-gray-600 mb-6">Click on each letter to hear its sound and see an example!</p>
+                
+                <!-- Level Selector -->
+                <div class="flex justify-center space-x-4 mb-8">
+                    <button class="bg-kidblue text-white px-6 py-3 rounded-2xl font-bold text-lg btn-3d" data-event="click:setVowelsLevel">
+                        Vowels Only
+                    </button>
+                    <button class="bg-kidorange text-white px-6 py-3 rounded-2xl font-bold text-lg btn-3d" data-event="click:setFullAlphabet">
+                        Full A-Z
+                    </button>
+                </div>
+            </div>
+
+            <!-- @MAP: alphabet letters.map(letter => ( -->
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-8">
+                <div class="card-3d bg-gradient-to-br from-red-400 to-red-500 rounded-3xl p-6 text-white text-center cursor-pointer transform hover:scale-110 transition-all duration-300" data-event="click:playLetterSound" data-letter="A">
+                    <div class="text-5xl font-bold mb-2">A</div>
+                    <div class="text-lg font-semibold">Apple</div>
+                </div>
+                <div class="card-3d bg-gradient-to-br from-blue-400 to-blue-500 rounded-3xl p-6 text-white text-center cursor-pointer transform hover:scale-110 transition-all duration-300" data-event="click:playLetterSound" data-letter="B">
+                    <div class="text-5xl font-bold mb-2">B</div>
+                    <div class="text-lg font-semibold">Ball</div>
+                </div>
+                <div class="card-3d bg-gradient-to-br from-green-400 to-green-500 rounded-3xl p-6 text-white text-center cursor-pointer transform hover:scale-110 transition-all duration-300" data-event="click:playLetterSound" data-letter="C">
+                    <div class="text-5xl font-bold mb-2">C</div>
+                    <div class="text-lg font-semibold">Cat</div>
+                </div>
+                <div class="card-3d bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-3xl p-6 text-white text-center cursor-pointer transform hover:scale-110 transition-all duration-300" data-event="click:playLetterSound" data-letter="D">
+                    <div class="text-5xl font-bold mb-2">D</div>
+                    <div class="text-lg font-semibold">Dog</div>
+                </div>
+                <div class="card-3d bg-gradient-to-br from-purple-400 to-purple-500 rounded-3xl p-6 text-white text-center cursor-pointer transform hover:scale-110 transition-all duration-300" data-event="click:playLetterSound" data-letter="E">
+                    <div class="text-5xl font-bold mb-2">E</div>
+                    <div class="text-lg font-semibold">Egg</div>
+                </div>
+                <div class="card-3d bg-gradient-to-br from-pink-400 to-pink-500 rounded-3xl p-6 text-white text-center cursor-pointer transform hover:scale-110 transition-all duration-300" data-event="click:playLetterSound" data-letter="F">
+                    <div class="text-5xl font-bold mb-2">F</div>
+                    <div class="text-lg font-semibold">Fish</div>
+                </div>
+            </div>
+            <!-- @END_MAP )) -->
+
+            <!-- Timer Game Section -->
+            <div class="bg-white rounded-3xl p-8 shadow-lg mb-8">
+                <h3 class="text-3xl font-bold text-kidnavy text-center mb-6">🎯 Letter Challenge</h3>
+                <p class="text-xl text-center mb-6">Find the letter that makes the "A" sound!</p>
+                
+                <!-- Timer -->
+                <div class="flex justify-center mb-6">
+                    <div class="bg-kidorange text-white px-6 py-3 rounded-2xl font-bold text-2xl">
+                        <i class="fas fa-clock mr-2"></i>
+                        <span data-bind="timer.remaining">00:30</span>
+                    </div>
+                </div>
+                
+                <!-- Challenge Options -->
+                <div class="grid grid-cols-4 gap-4 max-w-md mx-auto">
+                    <button class="bg-gray-200 hover:bg-kidblue hover:text-white rounded-2xl p-6 text-3xl font-bold transition-all duration-300" data-event="click:selectChallengeLetter" data-letter="B">B</button>
+                    <button class="bg-gray-200 hover:bg-kidblue hover:text-white rounded-2xl p-6 text-3xl font-bold transition-all duration-300" data-event="click:selectChallengeLetter" data-letter="A">A</button>
+                    <button class="bg-gray-200 hover:bg-kidblue hover:text-white rounded-2xl p-6 text-3xl font-bold transition-all duration-300" data-event="click:selectChallengeLetter" data-letter="D">D</button>
+                    <button class="bg-gray-200 hover:bg-kidblue hover:text-white rounded-2xl p-6 text-3xl font-bold transition-all duration-300" data-event="click:selectChallengeLetter" data-letter="C">C</button>
+                </div>
+            </div>
+        </section>
+        <!-- @END_COMPONENT: AlphabetsSection -->
+
+        <!-- @COMPONENT: NumbersSection [number cards, counting objects, math games] -->
+        <section id="numbers-section" class="hidden">
+            <div class="text-center mb-8">
+                <button class="bg-gray-500 text-white px-6 py-3 rounded-2xl font-bold text-xl mb-6 btn-3d" data-event="click:showHome">
+                    <i class="fas fa-arrow-left mr-2"></i>Back to Home
+                </button>
+                <h2 class="text-4xl md:text-5xl font-bold text-kidnavy mb-4">🔢 Learn Numbers</h2>
+                <p class="text-xl text-gray-600 mb-6">Count objects and practice simple math!</p>
+            </div>
+
+            <!-- Numbers Grid -->
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-8">
+                <!-- @MAP: numbers 1-20.map(number => ( -->
+                <div class="card-3d bg-gradient-to-br from-kidorange to-orange-500 rounded-3xl p-6 text-white text-center cursor-pointer transform hover:scale-110 transition-all duration-300" data-event="click:showNumberObjects" data-number="1">
+                    <div class="text-5xl font-bold mb-2">1</div>
+                    <div class="text-2xl">🍎</div>
+                    <div class="text-lg font-semibold">One</div>
+                </div>
+                <div class="card-3d bg-gradient-to-br from-kidblue to-blue-500 rounded-3xl p-6 text-white text-center cursor-pointer transform hover:scale-110 transition-all duration-300" data-event="click:showNumberObjects" data-number="2">
+                    <div class="text-5xl font-bold mb-2">2</div>
+                    <div class="text-2xl">🍎🍎</div>
+                    <div class="text-lg font-semibold">Two</div>
+                </div>
+                <div class="card-3d bg-gradient-to-br from-kidgreen to-green-500 rounded-3xl p-6 text-white text-center cursor-pointer transform hover:scale-110 transition-all duration-300" data-event="click:showNumberObjects" data-number="3">
+                    <div class="text-5xl font-bold mb-2">3</div>
+                    <div class="text-2xl">🍎🍎🍎</div>
+                    <div class="text-lg font-semibold">Three</div>
+                </div>
+                <div class="card-3d bg-gradient-to-br from-kidpink to-pink-500 rounded-3xl p-6 text-white text-center cursor-pointer transform hover:scale-110 transition-all duration-300" data-event="click:showNumberObjects" data-number="4">
+                    <div class="text-5xl font-bold mb-2">4</div>
+                    <div class="text-xl">🍎🍎<br>🍎🍎</div>
+                    <div class="text-lg font-semibold">Four</div>
+                </div>
+                <div class="card-3d bg-gradient-to-br from-kidpurple to-purple-500 rounded-3xl p-6 text-white text-center cursor-pointer transform hover:scale-110 transition-all duration-300" data-event="click:showNumberObjects" data-number="5">
+                    <div class="text-5xl font-bold mb-2">5</div>
+                    <div class="text-xl">🍎🍎🍎<br>🍎🍎</div>
+                    <div class="text-lg font-semibold">Five</div>
+                </div>
+                <!-- @END_MAP )) -->
+            </div>
+
+            <!-- Addition Mini-Game -->
+            <div class="bg-white rounded-3xl p-8 shadow-lg">
+                <h3 class="text-3xl font-bold text-kidnavy text-center mb-6">🧮 Simple Addition</h3>
+                <div class="text-center mb-6">
+                    <div class="text-6xl font-bold text-kidnavy mb-4">
+                        <span data-bind="mathGame.firstNumber">2</span>
+                        <span class="mx-4">+</span>
+                        <span data-bind="mathGame.secondNumber">3</span>
+                        <span class="mx-4">=</span>
+                        <span class="text-kidorange">?</span>
+                    </div>
+                    <p class="text-xl text-gray-600">Drag the correct answer!</p>
+                </div>
+                
+                <!-- @FUNCTIONALITY: Drag and drop answers -->
+                <div class="flex justify-center space-x-4 mb-6">
+                    <div class="bg-gray-200 border-4 border-dashed border-gray-400 rounded-3xl w-24 h-24 flex items-center justify-center text-4xl font-bold" id="answer-drop-zone" data-implementation="Drop zone for answers">
+                        <span class="text-gray-400">?</span>
+                    </div>
+                </div>
+                
+                <!-- Answer Options -->
+                <div class="grid grid-cols-4 gap-4 max-w-md mx-auto">
+                    <div class="card-3d bg-kidblue text-white rounded-2xl p-6 text-3xl font-bold text-center cursor-move" draggable="true" data-answer="4">4</div>
+                    <div class="card-3d bg-kidgreen text-white rounded-2xl p-6 text-3xl font-bold text-center cursor-move" draggable="true" data-answer="5">5</div>
+                    <div class="card-3d bg-kidorange text-white rounded-2xl p-6 text-3xl font-bold text-center cursor-move" draggable="true" data-answer="6">6</div>
+                    <div class="card-3d bg-kidpink text-white rounded-2xl p-6 text-3xl font-bold text-center cursor-move" draggable="true" data-answer="7">7</div>
+                </div>
+            </div>
+        </section>
+        <!-- @END_COMPONENT: NumbersSection -->
+
+        <!-- @COMPONENT: ShapesSection [shape cards, color changing, matching games] -->
+        <section id="shapes-section" class="hidden">
+            <div class="text-center mb-8">
+                <button class="bg-gray-500 text-white px-6 py-3 rounded-2xl font-bold text-xl mb-6 btn-3d" data-event="click:showHome">
+                    <i class="fas fa-arrow-left mr-2"></i>Back to Home
+                </button>
+                <h2 class="text-4xl md:text-5xl font-bold text-kidnavy mb-4">🔺 Shapes & Colors</h2>
+                <p class="text-xl text-gray-600 mb-6">Click shapes to change colors and play matching games!</p>
+            </div>
+
+            <!-- Interactive Shapes -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
+                <div class="text-center">
+                    <div class="w-32 h-32 mx-auto mb-4 cursor-pointer transform hover:scale-110 transition-all duration-300" data-event="click:changeShapeColor" data-shape="circle">
+                        <div class="w-full h-full bg-kidblue rounded-full card-3d flex items-center justify-center">
+                            <i class="fas fa-circle text-white text-4xl"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-2xl font-bold text-kidnavy">Circle</h3>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-32 h-32 mx-auto mb-4 cursor-pointer transform hover:scale-110 transition-all duration-300" data-event="click:changeShapeColor" data-shape="square">
+                        <div class="w-full h-full bg-kidorange card-3d flex items-center justify-center">
+                            <i class="fas fa-square text-white text-4xl"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-2xl font-bold text-kidnavy">Square</h3>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-32 h-32 mx-auto mb-4 cursor-pointer transform hover:scale-110 transition-all duration-300" data-event="click:changeShapeColor" data-shape="triangle">
+                        <div class="w-full h-full bg-kidpink card-3d flex items-center justify-center" style="clip-path: polygon(50% 0%, 0% 100%, 100% 100%);">
+                            
+                        </div>
+                    </div>
+                    <h3 class="text-2xl font-bold text-kidnavy">Triangle</h3>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-32 h-32 mx-auto mb-4 cursor-pointer transform hover:scale-110 transition-all duration-300" data-event="click:changeShapeColor" data-shape="star">
+                        <div class="w-full h-full bg-kidpurple card-3d flex items-center justify-center">
+                            <i class="fas fa-star text-white text-4xl"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-2xl font-bold text-kidnavy">Star</h3>
+                </div>
+            </div>
+
+            <!-- Color Matching Game -->
+            <div class="bg-white rounded-3xl p-8 shadow-lg">
+                <h3 class="text-3xl font-bold text-kidnavy text-center mb-6">🎯 Shape Color Match</h3>
+                <p class="text-xl text-center mb-6">Match each shape with its color!</p>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Shapes Column -->
+                    <div class="space-y-4">
+                        <h4 class="text-2xl font-bold text-center">Shapes</h4>
+                        <div class="space-y-3">
+                            <div class="card-3d bg-gray-200 rounded-2xl p-4 flex items-center justify-center cursor-move" draggable="true" data-shape="red-circle">
+                                <div class="w-16 h-16 bg-gray-400 rounded-full mr-4"></div>
+                                <span class="text-xl font-bold">Circle</span>
+                            </div>
+                            <div class="card-3d bg-gray-200 rounded-2xl p-4 flex items-center justify-center cursor-move" draggable="true" data-shape="blue-square">
+                                <div class="w-16 h-16 bg-gray-400 mr-4"></div>
+                                <span class="text-xl font-bold">Square</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Colors Column -->
+                    <div class="space-y-4">
+                        <h4 class="text-2xl font-bold text-center">Colors</h4>
+                        <div class="space-y-3">
+                            <div class="border-4 border-dashed border-gray-400 rounded-2xl p-6 text-center bg-red-100" data-drop-target="red">
+                                <div class="text-2xl font-bold text-red-600">Red</div>
+                            </div>
+                            <div class="border-4 border-dashed border-gray-400 rounded-2xl p-6 text-center bg-blue-100" data-drop-target="blue">
+                                <div class="text-2xl font-bold text-blue-600">Blue</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- @END_COMPONENT: ShapesSection -->
+
+        <!-- @COMPONENT: AnimalsSection [animal grid, sound effects, fun facts popup] -->
+        <section id="animals-section" class="hidden">
+            <div class="text-center mb-8">
+                <button class="bg-gray-500 text-white px-6 py-3 rounded-2xl font-bold text-xl mb-6 btn-3d" data-event="click:showHome">
+                    <i class="fas fa-arrow-left mr-2"></i>Back to Home
+                </button>
+                <h2 class="text-4xl md:text-5xl font-bold text-kidnavy mb-4">🐾 Meet the Animals</h2>
+                <p class="text-xl text-gray-600 mb-6">Click on animals to hear their sounds and learn fun facts!</p>
+            </div>
+
+            <!-- Animals Grid -->
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <!-- @MAP: animals.map(animal => ( -->
+                <div class="card-3d bg-white rounded-3xl p-6 text-center cursor-pointer transform hover:scale-105 transition-all duration-300" data-event="click:playAnimalSound" data-animal="dog">
+                    <!-- A playful golden retriever dog in a sunny meadow -->
+                    <img src="https://images.unsplash.com/photo-1552053831-71594a27632d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=300&h=200" alt="Golden retriever dog" class="rounded-2xl mb-4 w-full h-32 object-cover" />
+                    <h3 class="text-2xl font-bold text-kidnavy mb-2">🐶 Dog</h3>
+                    <p class="text-lg text-gray-600">"Woof!"</p>
+                </div>
+                
+                <div class="card-3d bg-white rounded-3xl p-6 text-center cursor-pointer transform hover:scale-105 transition-all duration-300" data-event="click:playAnimalSound" data-animal="cat">
+                    <!-- A fluffy orange tabby cat sitting on a windowsill -->
+                    <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=300&h=200" alt="Orange tabby cat" class="rounded-2xl mb-4 w-full h-32 object-cover" />
+                    <h3 class="text-2xl font-bold text-kidnavy mb-2">🐱 Cat</h3>
+                    <p class="text-lg text-gray-600">"Meow!"</p>
+                </div>
+                
+                <div class="card-3d bg-white rounded-3xl p-6 text-center cursor-pointer transform hover:scale-105 transition-all duration-300" data-event="click:playAnimalSound" data-animal="lion">
+                    <!-- A majestic lion with a golden mane in African savanna -->
+                    <img src="https://images.unsplash.com/photo-1546182990-dffeafbe841d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=300&h=200" alt="Majestic lion with golden mane" class="rounded-2xl mb-4 w-full h-32 object-cover" />
+                    <h3 class="text-2xl font-bold text-kidnavy mb-2">🦁 Lion</h3>
+                    <p class="text-lg text-gray-600">"Roar!"</p>
+                </div>
+                
+                <div class="card-3d bg-white rounded-3xl p-6 text-center cursor-pointer transform hover:scale-105 transition-all duration-300" data-event="click:playAnimalSound" data-animal="elephant">
+                    <!-- A large gray elephant with tusks walking in nature -->
+                    <img src="https://images.unsplash.com/photo-1564760055775-d63b17a55c44?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=300&h=200" alt="Large gray elephant with tusks" class="rounded-2xl mb-4 w-full h-32 object-cover" />
+                    <h3 class="text-2xl font-bold text-kidnavy mb-2">🐘 Elephant</h3>
+                    <p class="text-lg text-gray-600">"Trumpet!"</p>
+                </div>
+                
+                <div class="card-3d bg-white rounded-3xl p-6 text-center cursor-pointer transform hover:scale-105 transition-all duration-300" data-event="click:playAnimalSound" data-animal="cow">
+                    <!-- A black and white dairy cow grazing in green pasture -->
+                    <img src="https://images.unsplash.com/photo-1516467508483-a7212febe31a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=300&h=200" alt="Black and white dairy cow" class="rounded-2xl mb-4 w-full h-32 object-cover" />
+                    <h3 class="text-2xl font-bold text-kidnavy mb-2">🐄 Cow</h3>
+                    <p class="text-lg text-gray-600">"Moo!"</p>
+                </div>
+                
+                <div class="card-3d bg-white rounded-3xl p-6 text-center cursor-pointer transform hover:scale-105 transition-all duration-300" data-event="click:playAnimalSound" data-animal="bird">
+                    <!-- A colorful parrot with bright feathers perched on a branch -->
+                    <img src="https://images.unsplash.com/photo-1552728089-57bdde30beb3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=300&h=200" alt="Colorful parrot with bright feathers" class="rounded-2xl mb-4 w-full h-32 object-cover" />
+                    <h3 class="text-2xl font-bold text-kidnavy mb-2">🦜 Bird</h3>
+                    <p class="text-lg text-gray-600">"Tweet!"</p>
+                </div>
+                <!-- @END_MAP )) -->
+            </div>
+        </section>
+        <!-- @END_COMPONENT: AnimalsSection -->
+
+    </main>
+
+    <!-- @COMPONENT: InteractiveModal [popup lessons, rewards, fun facts] -->
+    <div id="modal-overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-lg mx-auto p-8 text-center transform scale-95 transition-all duration-300" id="modal-content">
+            <!-- Success Modal Content -->
+            <div id="success-modal" class="hidden">
+                <div class="text-6xl mb-4 animate-bounce-gentle">🎉</div>
+                <h3 class="text-3xl font-bold text-kidnavy mb-4">Great Job!</h3>
+                <p class="text-xl text-gray-600 mb-6" data-bind="modal.successMessage">You found the right answer!</p>
+                <div class="flex justify-center space-x-2 mb-6">
+                    <i class="fas fa-star text-yellow-400 text-3xl animate-wiggle"></i>
+                    <i class="fas fa-star text-yellow-400 text-3xl animate-wiggle" style="animation-delay: 0.2s;"></i>
+                    <i class="fas fa-star text-yellow-400 text-3xl animate-wiggle" style="animation-delay: 0.4s;"></i>
+                </div>
+                <button class="bg-kidgreen text-white px-8 py-4 rounded-2xl font-bold text-xl btn-3d" data-event="click:closeModal">
+                    Continue Learning!
+                </button>
+            </div>
+
+            <!-- Animal Facts Modal Content -->
+            <div id="animal-facts-modal" class="hidden">
+                <div class="text-6xl mb-4" data-bind="modal.animalEmoji">🐶</div>
+                <h3 class="text-3xl font-bold text-kidnavy mb-4" data-bind="modal.animalName">Amazing Dog Facts!</h3>
+                <div class="text-lg text-gray-600 mb-6 space-y-3" data-bind="modal.animalFacts">
+                    <p>🐕 Dogs have an amazing sense of smell - 10,000 times better than humans!</p>
+                    <p>🎾 They love to play and are very loyal friends!</p>
+                    <p>🏠 Dogs have been living with humans for over 15,000 years!</p>
+                </div>
+                <button class="bg-kidblue text-white px-8 py-4 rounded-2xl font-bold text-xl btn-3d" data-event="click:closeModal">
+                    <i class="fas fa-heart mr-2"></i>Cool!
+                </button>
+            </div>
+
+            <!-- Letter Learning Modal Content -->
+            <div id="letter-modal" class="hidden">
+                <div class="text-6xl font-bold text-kidblue mb-4 animate-wiggle" data-bind="modal.letter">A</div>
+                <h3 class="text-3xl font-bold text-kidnavy mb-4">
+                    <span data-bind="modal.letter">A</span> is for <span data-bind="modal.word">Apple</span>!
+                </h3>
+                <!-- A red apple on a white background with natural lighting -->
+                <img src="https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=300&h=200" alt="Red apple" class="rounded-2xl mb-6 w-48 h-32 object-cover mx-auto shadow-lg" data-bind="modal.image" />
+                <p class="text-xl text-gray-600 mb-6" data-bind="modal.phonics">The letter A makes the "ay" sound!</p>
+                <button class="bg-kidorange text-white px-8 py-4 rounded-2xl font-bold text-xl btn-3d" data-event="click:playLetterSound">
+                    <i class="fas fa-volume-up mr-2"></i>Play Sound
+                </button>
+                <button class="bg-gray-500 text-white px-8 py-4 rounded-2xl font-bold text-xl btn-3d ml-4" data-event="click:closeModal">
+                    Next Letter
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- @END_COMPONENT: InteractiveModal -->
+
+    <script>
+        // TODO: Implement React component state management, routing, and interactive functionality
+        // TODO: Add sound effects using Web Audio API
+        // TODO: Implement drag and drop functionality for games
+        // TODO: Add timer functionality for challenges
+        // TODO: Implement progress tracking and local storage
+        // TODO: Add parental mode with progress reports
+        // TODO: Integrate Framer Motion animations for React components
+
+        (function() {
+            // Section navigation simulation for mockup demonstration
+            const sections = ['home', 'alphabets', 'numbers', 'shapes', 'animals'];
+            let currentSection = 'home';
+            
+            function showSection(sectionName) {
+                // Hide all sections
+                sections.forEach(section => {
+                    const element = document.getElementById(`${section}-section`);
+                    if (element) {
+                        element.classList.add('hidden');
+                    }
+                });
+                
+                // Show target section
+                const targetSection = document.getElementById(`${sectionName}-section`);
+                if (targetSection) {
+                    targetSection.classList.remove('hidden');
+                }
+                currentSection = sectionName;
+            }
+            
+            // Mock modal functionality
+            function showModal(type, data = {}) {
+                const overlay = document.getElementById('modal-overlay');
+                const modalContent = document.getElementById('modal-content');
+                const allModals = ['success-modal', 'animal-facts-modal', 'letter-modal'];
+                
+                // Hide all modal content types
+                allModals.forEach(modalId => {
+                    document.getElementById(modalId)?.classList.add('hidden');
+                });
+                
+                // Show specific modal type
+                const targetModal = document.getElementById(`${type}-modal`);
+                if (targetModal) {
+                    targetModal.classList.remove('hidden');
+                }
+                
+                overlay.classList.remove('hidden');
+                setTimeout(() => {
+                    modalContent.classList.remove('scale-95');
+                    modalContent.classList.add('scale-100');
+                }, 10);
+            }
+            
+            function hideModal() {
+                const overlay = document.getElementById('modal-overlay');
+                const modalContent = document.getElementById('modal-content');
+                
+                modalContent.classList.remove('scale-100');
+                modalContent.classList.add('scale-95');
+                
+                setTimeout(() => {
+                    overlay.classList.add('hidden');
+                }, 300);
+            }
+            
+            // Event delegation for mockup interactions
+            document.addEventListener('click', function(event) {
+                const target = event.target.closest('[data-event]');
+                if (!target) return;
+                
+                const eventData = target.getAttribute('data-event');
+                const [eventType, handler] = eventData.split(':');
+                
+                if (eventType === 'click') {
+                    switch (handler) {
+                        case 'showHome':
+                            showSection('home');
+                            break;
+                        case 'showAlphabets':
+                            showSection('alphabets');
+                            break;
+                        case 'showNumbers':
+                            showSection('numbers');
+                            break;
+                        case 'showShapes':
+                            showSection('shapes');
+                            break;
+                        case 'showAnimals':
+                            showSection('animals');
+                            break;
+                        case 'playLetterSound':
+                            const letter = target.getAttribute('data-letter');
+                            console.log(`Playing sound for letter: ${letter}`);
+                            showModal('letter');
+                            break;
+                        case 'playAnimalSound':
+                            const animal = target.getAttribute('data-animal');
+                            console.log(`Playing sound for animal: ${animal}`);
+                            showModal('animal-facts');
+                            break;
+                        case 'closeModal':
+                            hideModal();
+                            break;
+                        case 'changeShapeColor':
+                            const shape = target.getAttribute('data-shape');
+                            const colors = ['bg-kidblue', 'bg-kidorange', 'bg-kidgreen', 'bg-kidpink', 'bg-kidpurple'];
+                            const currentColor = colors[Math.floor(Math.random() * colors.length)];
+                            const shapeElement = target.querySelector('div');
+                            if (shapeElement) {
+                                // Remove existing color classes
+                                colors.forEach(color => shapeElement.classList.remove(color));
+                                // Add new random color
+                                shapeElement.classList.add(currentColor);
+                            }
+                            break;
+                        default:
+                            console.log(`Handler: ${handler}`);
+                            showModal('success');
+                            break;
+                    }
+                }
+            });
+            
+            // Mock timer functionality
+            let gameTimer = null;
+            function startTimer(seconds = 30) {
+                let timeLeft = seconds;
+                const timerElement = document.querySelector('[data-bind="timer.remaining"]');
+                
+                gameTimer = setInterval(() => {
+                    const minutes = Math.floor(timeLeft / 60);
+                    const secs = timeLeft % 60;
+                    if (timerElement) {
+                        timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+                    }
+                    
+                    if (timeLeft <= 0) {
+                        clearInterval(gameTimer);
+                        showModal('success');
+                    }
+                    timeLeft--;
+                }, 1000);
+            }
+            
+            // Initialize the application
+            showSection('home');
+        })();
+    </script>
+</body>
+</html>

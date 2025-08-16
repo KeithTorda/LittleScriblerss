@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LittleScribler - Fun Learning for Kids</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'kid-blue': '#3B82F6',
+                        'kid-orange': '#F97316',
+                        'kid-green': '#10B981',
+                        'kid-pink': '#EC4899',
+                        'kid-purple': '#8B5CF6',
+                        'kid-yellow': '#EAB308'
+                    },
+                    fontFamily: {
+                        'kid': ['Comic Sans MS', 'cursive', 'system-ui']
+                    },
+                    animation: {
+                        'bounce-slow': 'bounce 2s infinite',
+                        'wiggle': 'wiggle 1s ease-in-out infinite',
+                    }
+                }
+            }
+        };
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @keyframes wiggle {
+            0%, 7% { transform: rotateZ(0); }
+            15% { transform: rotateZ(-15deg); }
+            20% { transform: rotateZ(10deg); }
+            25% { transform: rotateZ(-10deg); }
+            30% { transform: rotateZ(6deg); }
+            35% { transform: rotateZ(-4deg); }
+            40%, 100% { transform: rotateZ(0); }
+        }
+        
+        .interactive-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .interactive-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .bounce-in {
+            animation: bounceIn 0.6s ease-out;
+        }
+        
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+            70% { transform: scale(0.9); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-yellow-100 via-orange-50 to-pink-100 min-h-screen font-kid">
+
+    <!-- @COMPONENT: Header -->
+    <header class="bg-white shadow-lg rounded-b-3xl mx-4 mt-4 overflow-hidden">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div class="w-16 h-16 bg-gradient-to-br from-kid-blue to-kid-purple rounded-2xl flex items-center justify-center animate-bounce-slow">
+                        <i class="fas fa-pencil-alt text-white text-2xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-3xl font-bold text-gray-800">LittleScribler</h1>
+                        <p class="text-kid-orange text-lg font-semibold">Fun Learning for Kids!</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <!-- Progress indicator -->
+                    <div class="flex space-x-1">
+                        <div class="w-6 h-6 bg-kid-yellow rounded-full flex items-center justify-center">
+                            <i class="fas fa-star text-white text-xs"></i>
+                        </div>
+                        <div class="w-6 h-6 bg-kid-yellow rounded-full flex items-center justify-center">
+                            <i class="fas fa-star text-white text-xs"></i>
+                        </div>
+                        <div class="w-6 h-6 bg-kid-yellow rounded-full flex items-center justify-center">
+                            <i class="fas fa-star text-white text-xs"></i>
+                        </div>
+                        <div class="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center">
+                            <i class="fas fa-star text-gray-400 text-xs"></i>
+                        </div>
+                    </div>
+                    <button class="bg-kid-green hover:bg-green-600 text-white px-6 py-3 rounded-2xl font-bold text-lg transition-all duration-200 transform hover:scale-105">
+                        <i class="fas fa-volume-up mr-2"></i>Sound
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- @END_COMPONENT: Header -->
+
+    <!-- @COMPONENT: HomePageHero -->
+    <main class="container mx-auto px-4 py-8">
+        <section class="text-center mb-12">
+            <div class="bg-white rounded-3xl p-8 shadow-xl max-w-4xl mx-auto">
+                <h2 class="text-5xl font-bold text-gray-800 mb-4">
+                    Welcome to Your Learning Adventure! 
+                    <span class="animate-wiggle inline-block">🎨</span>
+                </h2>
+                <p class="text-2xl text-gray-600 mb-8">Choose a fun category to start learning!</p>
+                
+                <!-- Progress Bar -->
+                <div class="bg-gray-200 rounded-full h-4 mb-8 overflow-hidden">
+                    <div class="bg-gradient-to-r from-kid-blue via-kid-green to-kid-yellow h-full rounded-full animate-pulse" style="width: 60%"></div>
+                </div>
+                
+                <p class="text-lg text-gray-500 font-semibold">You're 60% through today's adventure!</p>
+            </div>
+        </section>
+        <!-- @END_COMPONENT: HomePageHero -->
+
+        <!-- @COMPONENT: CategoryNavigation -->
+        <section class="mb-12">
+            <h3 class="text-4xl font-bold text-center mb-8 text-gray-800">
+                Pick Your Learning Category! <span class="animate-bounce inline-block">🚀</span>
+            </h3>
+            
+            <!-- @MAP: categories.map(category => ( -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                
+                <!-- Alphabets Card -->
+                <div class="interactive-card bg-gradient-to-br from-kid-blue to-blue-600 rounded-3xl p-8 text-white text-center cursor-pointer group" data-category="alphabets">
+                    <div class="mb-6">
+                        <div class="w-20 h-20 bg-white rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:animate-wiggle">
+                            <i class="fas fa-font text-kid-blue text-3xl"></i>
+                        </div>
+                        <h4 class="text-3xl font-bold mb-2">Alphabets</h4>
+                        <p class="text-xl opacity-90">Learn A to Z with fun!</p>
+                    </div>
+                    <div class="flex justify-center space-x-2 mb-4">
+                        <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm font-semibold">26 Letters</span>
+                        <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm font-semibold">Sounds</span>
+                    </div>
+                    <button class="w-full bg-white text-kid-blue py-4 rounded-2xl font-bold text-xl hover:bg-gray-100 transition-all duration-200 transform group-hover:scale-105">
+                        Start Learning! <i class="fas fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+
+                <!-- Numbers Card -->
+                <div class="interactive-card bg-gradient-to-br from-kid-green to-green-600 rounded-3xl p-8 text-white text-center cursor-pointer group" data-category="numbers">
+                    <div class="mb-6">
+                        <div class="w-20 h-20 bg-white rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:animate-wiggle">
+                            <i class="fas fa-calculator text-kid-green text-3xl"></i>
+                        </div>
+                        <h4 class="text-3xl font-bold mb-2">Numbers</h4>
+                        <p class="text-xl opacity-90">Count from 1 to 20!</p>
+                    </div>
+                    <div class="flex justify-center space-x-2 mb-4">
+                        <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm font-semibold">1-20</span>
+                        <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm font-semibold">Math Games</span>
+                    </div>
+                    <button class="w-full bg-white text-kid-green py-4 rounded-2xl font-bold text-xl hover:bg-gray-100 transition-all duration-200 transform group-hover:scale-105">
+                        Start Counting! <i class="fas fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+
+                <!-- Shapes Card -->
+                <div class="interactive-card bg-gradient-to-br from-kid-purple to-purple-600 rounded-3xl p-8 text-white text-center cursor-pointer group" data-category="shapes">
+                    <div class="mb-6">
+                        <div class="w-20 h-20 bg-white rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:animate-wiggle">
+                            <i class="fas fa-shapes text-kid-purple text-3xl"></i>
+                        </div>
+                        <h4 class="text-3xl font-bold mb-2">Shapes & Colors</h4>
+                        <p class="text-xl opacity-90">Discover shapes and colors!</p>
+                    </div>
+                    <div class="flex justify-center space-x-2 mb-4">
+                        <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm font-semibold">Basic Shapes</span>
+                        <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm font-semibold">Colors</span>
+                    </div>
+                    <button class="w-full bg-white text-kid-purple py-4 rounded-2xl font-bold text-xl hover:bg-gray-100 transition-all duration-200 transform group-hover:scale-105">
+                        Explore Shapes! <i class="fas fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+
+                <!-- Animals Card -->
+                <div class="interactive-card bg-gradient-to-br from-kid-orange to-orange-600 rounded-3xl p-8 text-white text-center cursor-pointer group" data-category="animals">
+                    <div class="mb-6">
+                        <div class="w-20 h-20 bg-white rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:animate-wiggle">
+                            <i class="fas fa-paw text-kid-orange text-3xl"></i>
+                        </div>
+                        <h4 class="text-3xl font-bold mb-2">Animals</h4>
+                        <p class="text-xl opacity-90">Meet amazing animals!</p>
+                    </div>
+                    <div class="flex justify-center space-x-2 mb-4">
+                        <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm font-semibold">Animal Sounds</span>
+                        <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm font-semibold">Fun Facts</span>
+                    </div>
+                    <button class="w-full bg-white text-kid-orange py-4 rounded-2xl font-bold text-xl hover:bg-gray-100 transition-all duration-200 transform group-hover:scale-105">
+                        Meet Animals! <i class="fas fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+
+                <!-- Colors Card -->
+                <div class="interactive-card bg-gradient-to-br from-kid-pink to-pink-600 rounded-3xl p-8 text-white text-center cursor-pointer group" data-category="colors">
+                    <div class="mb-6">
+                        <div class="w-20 h-20 bg-white rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:animate-wiggle">
+                            <i class="fas fa-palette text-kid-pink text-3xl"></i>
+                        </div>
+                        <h4 class="text-3xl font-bold mb-2">Colors</h4>
+                        <p class="text-xl opacity-90">Paint the rainbow!</p>
+                    </div>
+                    <div class="flex justify-center space-x-2 mb-4">
+                        <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm font-semibold">Color Mixing</span>
+                        <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm font-semibold">Art Fun</span>
+                    </div>
+                    <button class="w-full bg-white text-kid-pink py-4 rounded-2xl font-bold text-xl hover:bg-gray-100 transition-all duration-200 transform group-hover:scale-105">
+                        Mix Colors! <i class="fas fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+
+                <!-- Drawing Card -->
+                <div class="interactive-card bg-gradient-to-br from-kid-yellow to-yellow-600 rounded-3xl p-8 text-white text-center cursor-pointer group" data-category="drawing">
+                    <div class="mb-6">
+                        <div class="w-20 h-20 bg-white rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:animate-wiggle">
+                            <i class="fas fa-paint-brush text-kid-yellow text-3xl"></i>
+                        </div>
+                        <h4 class="text-3xl font-bold mb-2">Drawing</h4>
+                        <p class="text-xl opacity-90">Create amazing art!</p>
+                    </div>
+                    <div class="flex justify-center space-x-2 mb-4">
+                        <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm font-semibold">Free Draw</span>
+                        <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm font-semibold">Templates</span>
+                    </div>
+                    <button class="w-full bg-white text-kid-yellow py-4 rounded-2xl font-bold text-xl hover:bg-gray-100 transition-all duration-200 transform group-hover:scale-105">
+                        Start Drawing! <i class="fas fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- @END_MAP )) -->
+        </section>
+        <!-- @END_COMPONENT: CategoryNavigation -->
+
+        <!-- @COMPONENT: AlphabetsSection -->
+        <section class="mb-16 hidden" id="alphabets-section">
+            <div class="bg-white rounded-3xl p-8 shadow-xl">
+                <h3 class="text-4xl font-bold text-center mb-8 text-gray-800">
+                    Learn Your ABCs! <span class="animate-bounce inline-block">📚</span>
+                </h3>
+                
+                <!-- Difficulty Level Selector -->
+                <div class="flex justify-center mb-8">
+                    <div class="bg-gray-100 rounded-2xl p-2 flex space-x-2">
+                        <button class="bg-kid-green text-white px-6 py-3 rounded-xl font-bold">Vowels</button>
+                        <button class="bg-gray-300 text-gray-600 px-6 py-3 rounded-xl font-bold hover:bg-gray-400 transition-colors">All Letters</button>
+                        <button class="bg-gray-300 text-gray-600 px-6 py-3 rounded-xl font-bold hover:bg-gray-400 transition-colors">Challenge</button>
+                    </div>
+                </div>
+
+                <!-- Alphabet Cards Grid -->
+                <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-8">
+                    <!-- Sample Alphabet Cards -->
+                    <div class="interactive-card bg-gradient-to-br from-red-400 to-red-500 rounded-2xl p-6 text-white text-center cursor-pointer" data-letter="A">
+                        <div class="text-6xl font-bold mb-2">A</div>
+                        <div class="text-sm font-semibold">Apple</div>
+                    </div>
+                    
+                    <div class="interactive-card bg-gradient-to-br from-blue-400 to-blue-500 rounded-2xl p-6 text-white text-center cursor-pointer" data-letter="B">
+                        <div class="text-6xl font-bold mb-2">B</div>
+                        <div class="text-sm font-semibold">Ball</div>
+                    </div>
+                    
+                    <div class="interactive-card bg-gradient-to-br from-green-400 to-green-500 rounded-2xl p-6 text-white text-center cursor-pointer" data-letter="C">
+                        <div class="text-6xl font-bold mb-2">C</div>
+                        <div class="text-sm font-semibold">Cat</div>
+                    </div>
+                    
+                    <div class="interactive-card bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-2xl p-6 text-white text-center cursor-pointer" data-letter="D">
+                        <div class="text-6xl font-bold mb-2">D</div>
+                        <div class="text-sm font-semibold">Dog</div>
+                    </div>
+                    
+                    <div class="interactive-card bg-gradient-to-br from-purple-400 to-purple-500 rounded-2xl p-6 text-white text-center cursor-pointer" data-letter="E">
+                        <div class="text-6xl font-bold mb-2">E</div>
+                        <div class="text-sm font-semibold">Elephant</div>
+                    </div>
+                </div>
+                
+                <!-- Game Timer -->
+                <div class="flex justify-center items-center space-x-6 mb-6">
+                    <div class="bg-kid-orange text-white px-6 py-3 rounded-2xl font-bold text-xl">
+                        <i class="fas fa-clock mr-2"></i>Time: <span data-bind="gameTimer">30</span>s
+                    </div>
+                    <div class="bg-kid-blue text-white px-6 py-3 rounded-2xl font-bold text-xl">
+                        <i class="fas fa-star mr-2"></i>Score: <span data-bind="currentScore">850</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- @END_COMPONENT: AlphabetsSection -->
+
+        <!-- @COMPONENT: NumbersSection -->
+        <section class="mb-16 hidden" id="numbers-section">
+            <div class="bg-white rounded-3xl p-8 shadow-xl">
+                <h3 class="text-4xl font-bold text-center mb-8 text-gray-800">
+                    Let's Count Together! <span class="animate-bounce inline-block">🔢</span>
+                </h3>
+                
+                <!-- Numbers Grid -->
+                <div class="grid grid-cols-4 md:grid-cols-5 lg:grid-cols-10 gap-4 mb-8">
+                    <!-- Sample Number Cards -->
+                    <div class="interactive-card bg-gradient-to-br from-kid-blue to-blue-500 rounded-2xl p-4 text-white text-center cursor-pointer" data-number="1">
+                        <div class="text-4xl font-bold mb-2">1</div>
+                        <div class="text-xs">One</div>
+                    </div>
+                    
+                    <div class="interactive-card bg-gradient-to-br from-kid-green to-green-500 rounded-2xl p-4 text-white text-center cursor-pointer" data-number="2">
+                        <div class="text-4xl font-bold mb-2">2</div>
+                        <div class="text-xs">Two</div>
+                    </div>
+                    
+                    <div class="interactive-card bg-gradient-to-br from-kid-orange to-orange-500 rounded-2xl p-4 text-white text-center cursor-pointer" data-number="3">
+                        <div class="text-4xl font-bold mb-2">3</div>
+                        <div class="text-xs">Three</div>
+                    </div>
+                    
+                    <div class="interactive-card bg-gradient-to-br from-kid-purple to-purple-500 rounded-2xl p-4 text-white text-center cursor-pointer" data-number="4">
+                        <div class="text-4xl font-bold mb-2">4</div>
+                        <div class="text-xs">Four</div>
+                    </div>
+                    
+                    <div class="interactive-card bg-gradient-to-br from-kid-pink to-pink-500 rounded-2xl p-4 text-white text-center cursor-pointer" data-number="5">
+                        <div class="text-4xl font-bold mb-2">5</div>
+                        <div class="text-xs">Five</div>
+                    </div>
+                </div>
+                
+                <!-- Math Game Area -->
+                <div class="bg-gradient-to-r from-kid-yellow to-yellow-300 rounded-3xl p-8 mb-6">
+                    <h4 class="text-3xl font-bold text-gray-800 text-center mb-6">Simple Addition Game!</h4>
+                    <div class="flex justify-center items-center space-x-6 text-6xl font-bold text-gray-800">
+                        <div class="bg-white rounded-2xl p-4 shadow-lg">2</div>
+                        <div>+</div>
+                        <div class="bg-white rounded-2xl p-4 shadow-lg">3</div>
+                        <div>=</div>
+                        <div class="bg-gray-200 border-4 border-dashed border-gray-400 rounded-2xl p-4 w-24 h-24 flex items-center justify-center cursor-pointer hover:bg-gray-300 transition-colors" data-implementation="Drag and drop answer area">
+                            ?
+                        </div>
+                    </div>
+                    
+                    <!-- Answer Options -->
+                    <div class="flex justify-center space-x-4 mt-8">
+                        <div class="bg-white rounded-2xl p-4 text-4xl font-bold text-gray-800 shadow-lg cursor-pointer hover:shadow-xl transition-shadow" data-answer="4">4</div>
+                        <div class="bg-white rounded-2xl p-4 text-4xl font-bold text-gray-800 shadow-lg cursor-pointer hover:shadow-xl transition-shadow" data-answer="5">5</div>
+                        <div class="bg-white rounded-2xl p-4 text-4xl font-bold text-gray-800 shadow-lg cursor-pointer hover:shadow-xl transition-shadow" data-answer="6">6</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- @END_COMPONENT: NumbersSection -->
+
+        <!-- @COMPONENT: AnimalsSection -->
+        <section class="mb-16 hidden" id="animals-section">
+            <div class="bg-white rounded-3xl p-8 shadow-xl">
+                <h3 class="text-4xl font-bold text-center mb-8 text-gray-800">
+                    Amazing Animals! <span class="animate-bounce inline-block">🦁</span>
+                </h3>
+                
+                <!-- Animals Grid -->
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    <!-- Dog -->
+                    <div class="interactive-card bg-gradient-to-br from-amber-400 to-orange-500 rounded-3xl p-6 text-white text-center cursor-pointer group" data-animal="dog">
+                        <!-- A happy golden retriever puppy playing in a sunny park -->
+                        <img src="https://images.unsplash.com/photo-1552053831-71594a27632d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=200" alt="Happy golden retriever puppy" class="w-full h-32 object-cover rounded-2xl mb-4" />
+                        <h4 class="text-2xl font-bold mb-2">Dog</h4>
+                        <p class="text-sm opacity-90 mb-4">Says "Woof!"</p>
+                        <button class="bg-white bg-opacity-20 hover:bg-opacity-30 px-4 py-2 rounded-xl font-bold text-sm transition-all">
+                            <i class="fas fa-volume-up mr-1"></i> Play Sound
+                        </button>
+                    </div>
+                    
+                    <!-- Cat -->
+                    <div class="interactive-card bg-gradient-to-br from-purple-400 to-pink-500 rounded-3xl p-6 text-white text-center cursor-pointer group" data-animal="cat">
+                        <!-- A cute orange tabby cat sitting by a window with soft natural lighting -->
+                        <img src="https://images.unsplash.com/photo-1574158622682-e40e69881006?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=200" alt="Orange tabby cat by window" class="w-full h-32 object-cover rounded-2xl mb-4" />
+                        <h4 class="text-2xl font-bold mb-2">Cat</h4>
+                        <p class="text-sm opacity-90 mb-4">Says "Meow!"</p>
+                        <button class="bg-white bg-opacity-20 hover:bg-opacity-30 px-4 py-2 rounded-xl font-bold text-sm transition-all">
+                            <i class="fas fa-volume-up mr-1"></i> Play Sound
+                        </button>
+                    </div>
+                    
+                    <!-- Elephant -->
+                    <div class="interactive-card bg-gradient-to-br from-gray-400 to-gray-600 rounded-3xl p-6 text-white text-center cursor-pointer group" data-animal="elephant">
+                        <!-- A majestic African elephant walking through golden savanna grasslands -->
+                        <img src="https://images.unsplash.com/photo-1564760055775-d63b17a55c44?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=200" alt="African elephant in savanna" class="w-full h-32 object-cover rounded-2xl mb-4" />
+                        <h4 class="text-2xl font-bold mb-2">Elephant</h4>
+                        <p class="text-sm opacity-90 mb-4">Says "Trumpet!"</p>
+                        <button class="bg-white bg-opacity-20 hover:bg-opacity-30 px-4 py-2 rounded-xl font-bold text-sm transition-all">
+                            <i class="fas fa-volume-up mr-1"></i> Play Sound
+                        </button>
+                    </div>
+                    
+                    <!-- Lion -->
+                    <div class="interactive-card bg-gradient-to-br from-yellow-500 to-orange-600 rounded-3xl p-6 text-white text-center cursor-pointer group" data-animal="lion">
+                        <!-- A powerful male lion with a full mane resting in golden grasslands -->
+                        <img src="https://images.unsplash.com/photo-1614027164847-1b28cfe1df60?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=200" alt="Male lion with mane in grasslands" class="w-full h-32 object-cover rounded-2xl mb-4" />
+                        <h4 class="text-2xl font-bold mb-2">Lion</h4>
+                        <p class="text-sm opacity-90 mb-4">Says "Roar!"</p>
+                        <button class="bg-white bg-opacity-20 hover:bg-opacity-30 px-4 py-2 rounded-xl font-bold text-sm transition-all">
+                            <i class="fas fa-volume-up mr-1"></i> Play Sound
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- @END_COMPONENT: AnimalsSection -->
+
+    </main>
+
+    <!-- @COMPONENT: RewardModal -->
+    <div id="reward-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-3xl p-8 max-w-md mx-4 text-center bounce-in">
+            <div class="text-8xl mb-4 animate-bounce">🎉</div>
+            <h3 class="text-4xl font-bold text-gray-800 mb-4">Great Job!</h3>
+            <p class="text-xl text-gray-600 mb-6">You earned a gold star!</p>
+            
+            <div class="flex justify-center mb-6">
+                <div class="w-16 h-16 bg-kid-yellow rounded-full flex items-center justify-center animate-bounce-slow">
+                    <i class="fas fa-star text-white text-2xl"></i>
+                </div>
+            </div>
+            
+            <button class="bg-gradient-to-r from-kid-blue to-blue-600 text-white px-8 py-4 rounded-2xl font-bold text-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-200 transform hover:scale-105">
+                Continue Learning! <i class="fas fa-arrow-right ml-2"></i>
+            </button>
+        </div>
+    </div>
+    <!-- @END_COMPONENT: RewardModal -->
+
+    <!-- @COMPONENT: AnimalFactModal -->
+    <div id="animal-fact-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-3xl p-8 max-w-lg mx-4 bounce-in">
+            <div class="flex justify-between items-start mb-6">
+                <h3 class="text-3xl font-bold text-gray-800">Fun Animal Fact!</h3>
+                <button class="text-gray-400 hover:text-gray-600 text-2xl" onclick="closeModal('animal-fact-modal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <!-- Dynamic content will be inserted here -->
+            <div id="animal-fact-content" class="text-center">
+                <div class="text-6xl mb-4">🐶</div>
+                <h4 class="text-2xl font-bold text-gray-800 mb-4">Did you know?</h4>
+                <p class="text-lg text-gray-600 mb-6">Dogs have an amazing sense of smell that's 10,000 times stronger than humans! They use their noses to explore the world.</p>
+                
+                <button class="bg-kid-orange text-white px-6 py-3 rounded-2xl font-bold hover:bg-orange-600 transition-colors">
+                    Cool! <i class="fas fa-thumbs-up ml-2"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- @END_COMPONENT: AnimalFactModal -->
+
+    <!-- @COMPONENT: Footer -->
+    <footer class="bg-white shadow-lg rounded-t-3xl mx-4 mb-4 mt-16">
+        <div class="container mx-auto px-6 py-8">
+            <div class="flex flex-col md:flex-row items-center justify-between">
+                <div class="text-center md:text-left mb-4 md:mb-0">
+                    <h4 class="text-2xl font-bold text-gray-800 mb-2">Keep Learning!</h4>
+                    <p class="text-gray-600">You're doing amazing! Come back tomorrow for more fun.</p>
+                </div>
+                
+                <div class="flex space-x-4">
+                    <button class="bg-kid-purple hover:bg-purple-600 text-white px-6 py-3 rounded-2xl font-bold transition-all duration-200 transform hover:scale-105">
+                        <i class="fas fa-user-friends mr-2"></i>Parent Mode
+                    </button>
+                    <button class="bg-kid-green hover:bg-green-600 text-white px-6 py-3 rounded-2xl font-bold transition-all duration-200 transform hover:scale-105">
+                        <i class="fas fa-home mr-2"></i>Home
+                    </button>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-200 mt-8 pt-6 text-center">
+                <p class="text-gray-500">© 2024 LittleScribler - Making learning fun for kids everywhere! 🌟</p>
+            </div>
+        </div>
+    </footer>
+    <!-- @END_COMPONENT: Footer -->
+
+    <script>
+        // TODO: Implement React state management, routing, and component logic
+        
+        (function() {
+            // Simple navigation simulation
+            const categoryCards = document.querySelectorAll('[data-category]');
+            const sections = document.querySelectorAll('section[id$="-section"]');
+            
+            categoryCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const category = card.getAttribute('data-category');
+                    
+                    // Hide all sections
+                    sections.forEach(section => section.classList.add('hidden'));
+                    
+                    // Show selected section
+                    const targetSection = document.getElementById(`${category}-section`);
+                    if (targetSection) {
+                        targetSection.classList.remove('hidden');
+                        targetSection.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+            
+            // Sound effect simulation
+            const soundButtons = document.querySelectorAll('[data-animal], [data-letter], [data-number]');
+            soundButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // TODO: Implement actual sound playback
+                    console.log('Playing sound for:', button.getAttribute('data-animal') || button.getAttribute('data-letter') || button.getAttribute('data-number'));
+                    
+                    // Show reward modal occasionally
+                    if (Math.random() > 0.7) {
+                        showModal('reward-modal');
+                    }
+                });
+            });
+            
+            // Animal fact modal
+            const animalCards = document.querySelectorAll('[data-animal]');
+            animalCards.forEach(card => {
+                card.addEventListener('dblclick', () => {
+                    showModal('animal-fact-modal');
+                });
+            });
+            
+            function showModal(modalId) {
+                const modal = document.getElementById(modalId);
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+            
+            function closeModal(modalId) {
+                const modal = document.getElementById(modalId);
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+            
+            // Make closeModal function globally available
+            window.closeModal = closeModal;
+            
+            // Auto-close modals when clicking outside
+            document.addEventListener('click', (e) => {
+                if (e.target.classList.contains('bg-black')) {
+                    e.target.closest('[id$="-modal"]').classList.add('hidden');
+                    e.target.closest('[id$="-modal"]').classList.remove('flex');
+                }
+            });
+            
+            // Timer simulation for games
+            let gameTimer = 30;
+            const timerElements = document.querySelectorAll('[data-bind="gameTimer"]');
+            
+            function updateTimer() {
+                timerElements.forEach(el => el.textContent = gameTimer);
+                if (gameTimer > 0) {
+                    gameTimer--;
+                    setTimeout(updateTimer, 1000);
+                } else {
+                    // Game finished
+                    showModal('reward-modal');
+                }
+            }
+            
+            // TODO: Implement Framer Motion animations, audio system, progress tracking
+            // TODO: Add drag and drop functionality for math games
+            // TODO: Implement level progression and difficulty scaling
+            // TODO: Add parental controls and progress reporting
+            
+        })();
+    </script>
+
+</body>
+</html>

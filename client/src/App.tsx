@@ -10,6 +10,7 @@ import Alphabets from "@/pages/alphabets";
 import Numbers from "@/pages/numbers";
 import Shapes from "@/pages/shapes";
 import Animals from "@/pages/animals";
+import FlappyBird from "@/pages/flappy-bird";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -22,6 +23,7 @@ function Router() {
         <Route path="/numbers" component={Numbers} />
         <Route path="/shapes" component={Shapes} />
         <Route path="/animals" component={Animals} />
+        <Route path="/flappy-bird" component={FlappyBird} />
         <Route component={NotFound} />
       </Switch>
     </>

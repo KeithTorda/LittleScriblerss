@@ -2,6 +2,7 @@ import { Link } from "wouter";
 import { motion } from "framer-motion";
 import LearningCard from "@/components/learning-card";
 import ProgressTracker from "@/components/progress-tracker";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
   const categories = [
@@ -36,6 +37,14 @@ export default function Home() {
       badge: "Fun Sounds",
       colorClass: "bg-gradient-to-br from-kidgreen to-green-600",
       path: "/animals"
+    },
+    {
+      title: "Flappy Animals",
+      emoji: "🦊",
+      description: "Play a fun animal game!",
+      badge: "New Game",
+      colorClass: "bg-gradient-to-br from-kidpurple to-purple-600",
+      path: "/flappy-bird"
     }
   ];
 
@@ -57,6 +66,30 @@ export default function Home() {
           <p className="text-xl md:text-2xl text-gray-600 mb-8 max-w-2xl mx-auto">
             Choose your favorite learning adventure and let's explore together!
           </p>
+        </motion.div>
+
+        {/* Prominent Flappy Bird Button */}
+        <motion.div 
+          className="mb-10"
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ 
+            type: "spring",
+            stiffness: 260,
+            damping: 20,
+            delay: 0.5
+          }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <Link href="/flappy-bird">
+            <Button className="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold py-6 px-10 rounded-xl shadow-lg text-2xl">
+              <span className="mr-3 text-3xl">🦊</span>
+              Play Flappy Animals!
+              <span className="ml-3 text-3xl">🐦</span>
+            </Button>
+          </Link>
+          <p className="mt-3 text-lg text-gray-600 animate-pulse">New Game! Try it now!</p>
         </motion.div>
 
         <ProgressTracker />
